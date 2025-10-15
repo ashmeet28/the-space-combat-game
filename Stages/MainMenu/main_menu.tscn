@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6w7saj51wed0"]
+
+[ext_resource type="Texture2D" uid="uid://b28hmgo0pno44" path="res://Stages/FightZone/background.png" id="1_w5ok3"]
+[ext_resource type="Texture2D" uid="uid://discpi33fuxvy" path="res://Entities/Spaceship/spaceship.png" id="2_v2tt7"]
+
+[node name="MainMenu" type="Node2D"]
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(1920, 1080)
+texture = ExtResource("1_w5ok3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1920, 1080)
+texture = ExtResource("2_v2tt7")
