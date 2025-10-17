@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b28hmgo0pno44"
-path="res://.godot/imported/background.png-ad6cc5aa96d90c116785110c1b87fd06.ctex"
+uid="uid://dchuwnr2fv14m"
+path="res://.godot/imported/background.png-8e3e1ed9993353319332377f480f5f2e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages/FightZone/background.png"
-dest_files=["res://.godot/imported/background.png-ad6cc5aa96d90c116785110c1b87fd06.ctex"]
+source_file="res://Stages/FightZone/Images/background.png"
+dest_files=["res://.godot/imported/background.png-8e3e1ed9993353319332377f480f5f2e.ctex"]
 
 [params]
 
