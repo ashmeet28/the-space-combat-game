@@ -8,7 +8,7 @@ const POINT_LIFETIME:int = 100
 var points_tracked: Array[Vector2] =[]
 var points_timestamp: Array[int] = []
 	
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var final_trail_offset = SPACESHIP_TRAIL_OFFSET
 	if spaceship_engine == 1:
 		final_trail_offset.x = -final_trail_offset.x
