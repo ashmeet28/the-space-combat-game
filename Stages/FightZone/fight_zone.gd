@@ -4,7 +4,7 @@ extends Node2D
 func _ready() -> void:
 	var spaceship = preload(
 		"res://Entities/Spaceship/spaceship.tscn").instantiate()
-	spaceship.position = Vector2(1920,1080)
+	spaceship.position = Vector2(1920, 1080)
 	add_child.call_deferred(spaceship)
 	
 	var spaceship_trail_1 = preload(
