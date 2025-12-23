@@ -19,6 +19,6 @@ func _ready() -> void:
 	spaceship_trail_2.spaceship_instance_id = spaceship.get_instance_id()
 	spaceship_trail_2.spaceship_engine = 1
 	spaceship_trail_2.default_color = Color(0,255,255,1)
-	
+
 	add_child.call_deferred(spaceship_trail_2)
 	

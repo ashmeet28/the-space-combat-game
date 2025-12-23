@@ -11,11 +11,11 @@ var RETURN_PLAYGROUND_MARGIN = 200
 
 var is_returning_to_playground = false
 
-func joy_axis_apply_deadzone(v:float, d:float)-> float:
-	if abs(v) >= d:
-		return v
-	else:
-		return 0.0
+#func joy_axis_apply_deadzone(v:float, d:float)-> float:
+	#if abs(v) >= d:
+		#return v
+	#else:
+		#return 0.0
 
 func handle_return_to_playground(delta: float):
 	var playground_center = (Vector2(float(PLAYGROUND_WIDTH)/2, 
@@ -29,19 +29,19 @@ func handle_return_to_playground(delta: float):
 
 func handle_controller_input(delta: float):
 	var jv = Vector2(
-	joy_axis_apply_deadzone(Input.get_joy_axis(0, JOY_AXIS_LEFT_X), 0.2),
-	joy_axis_apply_deadzone(Input.get_joy_axis(0, JOY_AXIS_LEFT_Y), 0.2))
+		Input.get_joy_axis(0, JOY_AXIS_LEFT_X),
+		Input.get_joy_axis(0, JOY_AXIS_LEFT_Y))
 
 	if (jv.length() > 0.2):
 		var d =  Vector2.UP.rotated(rotation).cross(jv.normalized())
-		if (d > 0.001):
+		if (d >= 0):
 			rotation += ROTATION_SPEED * delta
-		if (d < -0.001):
+		else:
 			rotation -= ROTATION_SPEED * delta
 
 func _physics_process(delta: float) -> void:
-	if ((position.x > PLAYGROUND_WIDTH ) or 
-		(position.y > PLAYGROUND_HEIGHT ) or 
+	if ((position.x > PLAYGROUND_WIDTH) or 
+		(position.y > PLAYGROUND_HEIGHT) or 
 		(position.x < 0) or
 		(position.y < 0)):
 		is_returning_to_playground = true
