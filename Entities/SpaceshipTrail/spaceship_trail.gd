@@ -1,21 +1,24 @@
 extends Line2D
 
-var spaceship_instance_id:int
-var spaceship_engine:int = 0
-const SPACESHIP_TRAIL_OFFSET = Vector2(15, 60)
+var spaceship
+var spaceship_engine = 0
 
-const POINT_LIFETIME:int = 100
+var SPACESHIP_TRAIL_OFFSET = Vector2(15, 60)
+var POINT_LIFETIME = 100
+
 var points_tracked: Array[Vector2] =[]
 var points_timestamp: Array[int] = []
+
+func _ready() -> void:
+	default_color = spaceship.ship_trail_color
 
 func _physics_process(_delta: float) -> void:
 	var final_trail_offset = SPACESHIP_TRAIL_OFFSET
 	if spaceship_engine == 1:
 		final_trail_offset.x = -final_trail_offset.x
 
-	points_tracked.append(instance_from_id(spaceship_instance_id).position+
-	final_trail_offset.rotated(
-		instance_from_id(spaceship_instance_id).rotation))
+	points_tracked.append(spaceship.position+
+	final_trail_offset.rotated(spaceship.rotation))
 
 	points_timestamp.append(Time.get_ticks_msec())
 

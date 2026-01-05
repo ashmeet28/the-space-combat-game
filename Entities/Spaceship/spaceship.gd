@@ -1,21 +1,24 @@
 extends Area2D
 
-var ROTATION_SPEED = PI
-var DEFAULT_SPEED = 750
-var controller_input_map = {
+var ship_default_rotation_speed = PI
+var ship_default_speed = 750
+
+var ship_controller = {
 	"device": 0,
 	"axis_x": JOY_AXIS_LEFT_X,
 	"axis_y": JOY_AXIS_LEFT_Y
 }
 
+var ship_trail_color = Color(255,255,255, 1)
+var ship_group = 0
+
 var PLAYGROUND_WIDTH = 3840
 var PLAYGROUND_HEIGHT = 2160
 
-var RETURN_PLAYGROUND_MARGIN = 200
+var PLAYGROUND_RETURN_MARGIN = 200
 
-var is_returning_to_playground = false
+var ship_is_returning_to_playground = false
 
-var spaceship_state = {}
 
 #func joy_axis_apply_deadzone(v:float, d:float)-> float:
 	#if abs(v) >= d:
@@ -24,40 +27,38 @@ var spaceship_state = {}
 		#return 0.0
 
 func handle_return_to_playground(delta: float):
-	var playground_center = (Vector2(float(PLAYGROUND_WIDTH)/2, 
-	float(PLAYGROUND_HEIGHT)/2))
+	var playground_center = (Vector2(float(PLAYGROUND_WIDTH)/2, float(PLAYGROUND_HEIGHT)/2))
 
-	if (Vector2.UP.rotated(rotation).cross(
-		(playground_center - position).normalized()) >= 0):
-		rotation += ROTATION_SPEED * delta
+	if (Vector2.UP.rotated(rotation).cross((playground_center - position).normalized()) >= 0):
+		rotation += ship_default_rotation_speed * delta
 	else:
-		rotation -= ROTATION_SPEED * delta
+		rotation -= ship_default_rotation_speed * delta
 
 func handle_controller_input(delta: float):
 	var jv = Vector2(
-		Input.get_joy_axis(controller_input_map.device, controller_input_map.axis_x),
-		Input.get_joy_axis(controller_input_map.device, controller_input_map.axis_y))
+		Input.get_joy_axis(ship_controller.device, ship_controller.axis_x),
+		Input.get_joy_axis(ship_controller.device, ship_controller.axis_y))
 
 	if (jv.length() > 0.2):
 		var d =  Vector2.UP.rotated(rotation).cross(jv.normalized())
 		if (d >= 0):
-			rotation += ROTATION_SPEED * delta
+			rotation += ship_default_rotation_speed * delta
 		else:
-			rotation -= ROTATION_SPEED * delta
+			rotation -= ship_default_rotation_speed * delta
 
 func _physics_process(delta: float) -> void:
 	if ((position.x > PLAYGROUND_WIDTH) or (position.y > PLAYGROUND_HEIGHT) or 
 		(position.x < 0) or (position.y < 0)):
-		is_returning_to_playground = true
+		ship_is_returning_to_playground = true
 
-	if is_returning_to_playground:
+	if ship_is_returning_to_playground:
 		handle_return_to_playground(delta)
-		if ((position.x < PLAYGROUND_WIDTH - RETURN_PLAYGROUND_MARGIN) and
-			(position.y < PLAYGROUND_HEIGHT -RETURN_PLAYGROUND_MARGIN) and
-			(position.x > RETURN_PLAYGROUND_MARGIN) and
-			(position.y > RETURN_PLAYGROUND_MARGIN)):
-			is_returning_to_playground = false
+		if ((position.x < PLAYGROUND_WIDTH - PLAYGROUND_RETURN_MARGIN) and
+			(position.y < PLAYGROUND_HEIGHT -PLAYGROUND_RETURN_MARGIN) and
+			(position.x > PLAYGROUND_RETURN_MARGIN) and
+			(position.y > PLAYGROUND_RETURN_MARGIN)):
+			ship_is_returning_to_playground = false
 	else:
 		handle_controller_input(delta)
 
-	position +=  (Vector2.UP * DEFAULT_SPEED * delta).rotated(rotation)
+	position +=  (Vector2.UP * ship_default_speed * delta).rotated(rotation)
