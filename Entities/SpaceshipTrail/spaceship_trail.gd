@@ -1,7 +1,7 @@
 extends Line2D
 
 var spaceship
-var spaceship_engine = 0
+var spaceship_engine
 
 var SPACESHIP_TRAIL_OFFSET = Vector2(15, 60)
 var POINT_LIFETIME = 100

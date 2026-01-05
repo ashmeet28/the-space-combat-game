@@ -3,14 +3,12 @@ extends Area2D
 var ship_default_rotation_speed = PI
 var ship_default_speed = 750
 
-var ship_controller = {
-	"device": 0,
-	"axis_x": JOY_AXIS_LEFT_X,
-	"axis_y": JOY_AXIS_LEFT_Y
-}
+var ship_controller_is_connected= false
+var ship_controller_device
+var ship_controller_mapping
 
-var ship_trail_color = Color(255,255,255, 1)
-var ship_group = 0
+var ship_trail_color
+var ship_group
 
 var PLAYGROUND_WIDTH = 3840
 var PLAYGROUND_HEIGHT = 2160
@@ -34,11 +32,12 @@ func handle_return_to_playground(delta: float):
 	else:
 		rotation -= ship_default_rotation_speed * delta
 
+
 func handle_controller_input(delta: float):
 	var jv = Vector2(
-		Input.get_joy_axis(ship_controller.device, ship_controller.axis_x),
-		Input.get_joy_axis(ship_controller.device, ship_controller.axis_y))
-
+		Input.get_joy_axis(ship_controller_device, ship_controller_mapping.axis_x),
+		Input.get_joy_axis(ship_controller_device, ship_controller_mapping.axis_y))
+		
 	if (jv.length() > 0.2):
 		var d =  Vector2.UP.rotated(rotation).cross(jv.normalized())
 		if (d >= 0):
@@ -58,7 +57,6 @@ func _physics_process(delta: float) -> void:
 			(position.x > PLAYGROUND_RETURN_MARGIN) and
 			(position.y > PLAYGROUND_RETURN_MARGIN)):
 			ship_is_returning_to_playground = false
-	else:
+	elif ship_controller_is_connected:
 		handle_controller_input(delta)
-
 	position +=  (Vector2.UP * ship_default_speed * delta).rotated(rotation)

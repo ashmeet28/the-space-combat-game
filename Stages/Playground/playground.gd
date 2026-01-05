@@ -1,46 +1,47 @@
 extends Node2D
 
-var SPACESHIPS_STARTING_MARGIN = 300
+var SPACESHIP_STARTING_MARGIN = 300
 var PLAYGROUND_WIDTH = 3840
 var PLAYGROUND_HEIGHT = 2160
 
 var spaceship_red_template = {
 	"trail_color": Color(255, 0, 0, 1),
-	"exists": false,
 	"group": 1,
 	"starting_position": Vector2(
-		0+SPACESHIPS_STARTING_MARGIN,
-		0+SPACESHIPS_STARTING_MARGIN),
+		0+SPACESHIP_STARTING_MARGIN,
+		0+SPACESHIP_STARTING_MARGIN),
 	"starting_rotation": PI/2
 }
 var spaceship_yellow_template = {
 	"trail_color": Color(255, 255, 0, 1),
-	"exists": false,
 	"group": 1,
 	"starting_position": Vector2(
-		0+SPACESHIPS_STARTING_MARGIN,
-		PLAYGROUND_HEIGHT-SPACESHIPS_STARTING_MARGIN),
+		0+SPACESHIP_STARTING_MARGIN,
+		PLAYGROUND_HEIGHT-SPACESHIP_STARTING_MARGIN),
 	"starting_rotation": PI/2
 }
 var spaceship_green_template = {
 	"trail_color": Color(0, 255, 0, 1),
-	"exists": false,
 	"group": 2,
 	"starting_position": Vector2(
-		PLAYGROUND_WIDTH-SPACESHIPS_STARTING_MARGIN,
-		0+SPACESHIPS_STARTING_MARGIN),
+		PLAYGROUND_WIDTH-SPACESHIP_STARTING_MARGIN,
+		0+SPACESHIP_STARTING_MARGIN),
 	"starting_rotation": PI/2 + PI
 }
 var spaceship_aqua_template = {
 	"trail_color": Color(0, 255, 255, 1),
-	"exists": false,
 	"group": 2,
 	"starting_position": Vector2(
-		PLAYGROUND_WIDTH-SPACESHIPS_STARTING_MARGIN,
-		PLAYGROUND_HEIGHT-SPACESHIPS_STARTING_MARGIN),
+		PLAYGROUND_WIDTH-SPACESHIP_STARTING_MARGIN,
+		PLAYGROUND_HEIGHT-SPACESHIP_STARTING_MARGIN),
 	"starting_rotation": PI/2 + PI
 }
 
+var spaceship_red
+var spaceship_yellow
+var spaceship_green
+var spaceship_aqua
+var spaceships
 
 func spaceship_add_new(spaceship_template):
 	var spaceship = preload("res://Entities/Spaceship/spaceship.tscn").instantiate()
@@ -63,17 +64,48 @@ func spaceship_trails_add_new(spaceship_state):
 	spaceship_trail_add_new(0, spaceship_state)
 	spaceship_trail_add_new(1, spaceship_state)
 	
-# TODO: Handle multiple inputs and debug mode for single player debuging.
+# TODO: Handle multiple inputs and debug mode for single player debugging.
+
 func _ready() -> void:
-	var spaceship
-	spaceship = spaceship_add_new(spaceship_red_template)
-	spaceship_trails_add_new(spaceship)
-	spaceship = spaceship_add_new(spaceship_green_template)
-	spaceship_trails_add_new(spaceship)
-	spaceship = spaceship_add_new(spaceship_aqua_template)
-	spaceship_trails_add_new(spaceship)
-	spaceship = spaceship_add_new(spaceship_yellow_template)
-	spaceship_trails_add_new(spaceship)
+	spaceship_red = spaceship_add_new(spaceship_red_template)
+	spaceship_trails_add_new(spaceship_red)
+	spaceship_yellow = spaceship_add_new(spaceship_yellow_template)
+	spaceship_trails_add_new(spaceship_yellow)
+	spaceship_green = spaceship_add_new(spaceship_green_template)
+	spaceship_trails_add_new(spaceship_green)
+	spaceship_aqua = spaceship_add_new(spaceship_aqua_template)
+	spaceship_trails_add_new(spaceship_aqua)
+	spaceships = [spaceship_red, spaceship_yellow, spaceship_green, spaceship_aqua]
+
+func handle_debug_mode_input(_delta: float):
+	var disconnect_spaceships_controller = func():
+		for ship in spaceships:
+			ship.ship_controller_is_connected = false
+			ship.ship_controller_device = null
+			ship.ship_controller_mapping = null
+	
+	var connect_spaceship_controller = func(ship, device, controller_mapping):
+		ship.ship_controller_is_connected = true
+		ship.ship_controller_device = device
+		ship.ship_controller_mapping = controller_mapping
+
+	var dpad_spaceship_mapping = {
+		"dpad_up": spaceship_red,
+		"dpad_right": spaceship_green,
+		"dpad_left" : spaceship_aqua,
+		"dpad_down" : spaceship_yellow}
+
+	for k in dpad_spaceship_mapping:
+		if Input.is_joy_button_pressed(0, GameSettings.controller_mapping[k]):
+			disconnect_spaceships_controller.call()
+			connect_spaceship_controller.call(
+				dpad_spaceship_mapping[k], 0, GameSettings.controller_mapping)
+		
+	
+func _physics_process(delta: float) -> void:
+	if GameSettings.is_debug_mode_enabled:
+		handle_debug_mode_input(delta)
+			
 	
 #func _physics_process(_delta: float) -> void:
 	#if Input.is_joy_button_pressed(0,0 as JoyButton):
