@@ -64,7 +64,6 @@ func spaceship_trails_add_new(spaceship_state):
 	spaceship_trail_add_new(0, spaceship_state)
 	spaceship_trail_add_new(1, spaceship_state)
 	
-# TODO: Handle multiple inputs and debug mode for single player debugging.
 
 func _ready() -> void:
 	spaceship_red = spaceship_add_new(spaceship_red_template)
@@ -77,7 +76,8 @@ func _ready() -> void:
 	spaceship_trails_add_new(spaceship_aqua)
 	spaceships = [spaceship_red, spaceship_yellow, spaceship_green, spaceship_aqua]
 
-func handle_debug_mode_input(_delta: float):
+	
+func handle_debug_mode_input_spaceship_switching(_delta: float):
 	var disconnect_spaceships_controller = func():
 		for ship in spaceships:
 			ship.ship_controller_is_connected = false
@@ -96,17 +96,39 @@ func handle_debug_mode_input(_delta: float):
 		"dpad_down" : spaceship_yellow}
 
 	for k in dpad_spaceship_mapping:
-		if Input.is_joy_button_pressed(0, GameSettings.controller_mapping[k]):
+		var joy_device = 0
+		if Input.is_joy_button_pressed(joy_device, GameSettings.controller_mapping[k]):
 			disconnect_spaceships_controller.call()
 			connect_spaceship_controller.call(
-				dpad_spaceship_mapping[k], 0, GameSettings.controller_mapping)
+				dpad_spaceship_mapping[k], joy_device, GameSettings.controller_mapping)
 		
 	
+
+func spaceship_add_bullet(spaceship, _delta: float):
+	if spaceship.ship_bullet_cooldown_time_left > 0:
+		return
+	var bullet = preload("res://Entities/Bullet/bullet.tscn").instantiate()
+	bullet.position =  spaceship.position + Vector2(0, -65).rotated(spaceship.rotation)
+	bullet.rotation =  spaceship.rotation
+	add_child.call_deferred(bullet)
+	spaceship.ship_bullet_cooldown_time_left = spaceship.ship_bullet_cooldown_time
+
+func spaceship_handle_input(spaceship, delta: float):
+	if !spaceship.ship_controller_is_connected:
+		return
+	if Input.is_joy_button_pressed(spaceship.ship_controller_device, 
+		spaceship.ship_controller_mapping["button_a"]):
+		spaceship_add_bullet(spaceship, delta)
+	if Input.is_joy_button_pressed(spaceship.ship_controller_device, 
+		spaceship.ship_controller_mapping["button_back"]):
+		get_tree().quit(0)
+
 func _physics_process(delta: float) -> void:
 	if GameSettings.is_debug_mode_enabled:
-		handle_debug_mode_input(delta)
-			
-	
+		handle_debug_mode_input_spaceship_switching(delta)
+	for ship in spaceships:
+		spaceship_handle_input(ship, delta)
+
 #func _physics_process(_delta: float) -> void:
 	#if Input.is_joy_button_pressed(0,0 as JoyButton):
 		#if Time.get_ticks_msec() < bullet_last_fired + 100:

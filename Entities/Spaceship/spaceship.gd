@@ -18,6 +18,9 @@ var PLAYGROUND_RETURN_MARGIN = 200
 var ship_is_returning_to_playground = false
 
 
+var ship_bullet_cooldown_time_left = 0.0
+var ship_bullet_cooldown_time = 0.06
+
 #func joy_axis_apply_deadzone(v:float, d:float)-> float:
 	#if abs(v) >= d:
 		#return v
@@ -60,3 +63,6 @@ func _physics_process(delta: float) -> void:
 	elif ship_controller_is_connected:
 		handle_controller_input(delta)
 	position +=  (Vector2.UP * ship_default_speed * delta).rotated(rotation)
+	
+	if ship_bullet_cooldown_time_left > 0:
+		ship_bullet_cooldown_time_left -= delta
