@@ -103,24 +103,7 @@ func handle_debug_mode_input_spaceship_switching(_delta: float):
 			connect_spaceship_controller.call(
 				dpad_spaceship_mapping[k], joy_device, GameSettings.controller_mapping)
 		
-	
-
-
-
-
 
 func _physics_process(delta: float) -> void:
 	if GameSettings.is_debug_mode_enabled:
 		handle_debug_mode_input_spaceship_switching(delta)
-
-#func _physics_process(_delta: float) -> void:
-	#if Input.is_joy_button_pressed(0,0 as JoyButton):
-		#if Time.get_ticks_msec() < bullet_last_fired + 100:
-			#return
-		#bullet_last_fired = Time.get_ticks_msec()
-		#var bullet = preload("res://Entities/Bullet/bullet.tscn").instantiate()
-		#bullet.position =  (instance_from_id(spaceship_instance_id).position + 
-		#Vector2(0, -65).rotated(
-			#instance_from_id(spaceship_instance_id).rotation))
-		#bullet.rotation = instance_from_id(spaceship_instance_id).rotation
-		#add_child.call_deferred(bullet)

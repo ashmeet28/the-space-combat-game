@@ -23,12 +23,6 @@ var ship_playground
 var ship_bullet_cooldown_time_left = 0.0
 var ship_bullet_cooldown_time = 0.06
 
-#func joy_axis_apply_deadzone(v:float, d:float)-> float:
-	#if abs(v) >= d:
-		#return v
-	#else:
-		#return 0.0
-
 func handle_return_to_playground(delta: float):
 	var playground_center = (Vector2(float(PLAYGROUND_WIDTH)/2, float(PLAYGROUND_HEIGHT)/2))
 
@@ -70,7 +64,7 @@ func _physics_process(delta: float) -> void:
 	if ship_is_returning_to_playground:
 		handle_return_to_playground(delta)
 		if ((position.x < PLAYGROUND_WIDTH - PLAYGROUND_RETURN_MARGIN) and
-			(position.y < PLAYGROUND_HEIGHT -PLAYGROUND_RETURN_MARGIN) and
+			(position.y < PLAYGROUND_HEIGHT - PLAYGROUND_RETURN_MARGIN) and
 			(position.x > PLAYGROUND_RETURN_MARGIN) and
 			(position.y > PLAYGROUND_RETURN_MARGIN)):
 			ship_is_returning_to_playground = false
