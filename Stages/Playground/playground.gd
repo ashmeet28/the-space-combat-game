@@ -49,6 +49,7 @@ func spaceship_add_new(spaceship_template):
 	spaceship.rotation = spaceship_template.starting_rotation
 	spaceship.ship_group = spaceship_template.group
 	spaceship.ship_trail_color = spaceship_template.trail_color
+	spaceship.ship_playground = self
 	add_child.call_deferred(spaceship)
 	return spaceship
 
@@ -104,30 +105,13 @@ func handle_debug_mode_input_spaceship_switching(_delta: float):
 		
 	
 
-func spaceship_add_bullet(spaceship, _delta: float):
-	if spaceship.ship_bullet_cooldown_time_left > 0:
-		return
-	var bullet = preload("res://Entities/Bullet/bullet.tscn").instantiate()
-	bullet.position =  spaceship.position + Vector2(0, -65).rotated(spaceship.rotation)
-	bullet.rotation =  spaceship.rotation
-	add_child.call_deferred(bullet)
-	spaceship.ship_bullet_cooldown_time_left = spaceship.ship_bullet_cooldown_time
 
-func spaceship_handle_input(spaceship, delta: float):
-	if !spaceship.ship_controller_is_connected:
-		return
-	if Input.is_joy_button_pressed(spaceship.ship_controller_device, 
-		spaceship.ship_controller_mapping["button_a"]):
-		spaceship_add_bullet(spaceship, delta)
-	if Input.is_joy_button_pressed(spaceship.ship_controller_device, 
-		spaceship.ship_controller_mapping["button_back"]):
-		get_tree().quit(0)
+
+
 
 func _physics_process(delta: float) -> void:
 	if GameSettings.is_debug_mode_enabled:
 		handle_debug_mode_input_spaceship_switching(delta)
-	for ship in spaceships:
-		spaceship_handle_input(ship, delta)
 
 #func _physics_process(_delta: float) -> void:
 	#if Input.is_joy_button_pressed(0,0 as JoyButton):
