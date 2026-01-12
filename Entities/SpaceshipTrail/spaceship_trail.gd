@@ -10,9 +10,14 @@ var points_tracked: Array[Vector2] =[]
 var points_timestamp: Array[int] = []
 
 func _ready() -> void:
-	default_color = spaceship.ship_trail_color
+	if is_instance_valid(spaceship):
+		default_color = spaceship.ship_trail_color
 
 func _physics_process(_delta: float) -> void:
+	if !is_instance_valid(spaceship):
+		queue_free()
+		return
+	
 	var final_trail_offset = SPACESHIP_TRAIL_OFFSET
 	if spaceship_engine == 1:
 		final_trail_offset.x = -final_trail_offset.x

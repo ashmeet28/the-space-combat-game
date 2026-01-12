@@ -10,7 +10,6 @@ var ship_controller_device
 var ship_controller_mapping
 
 var ship_trail_color
-var ship_group
 
 var PLAYGROUND_WIDTH = 3840
 var PLAYGROUND_HEIGHT = 2160
@@ -22,6 +21,9 @@ var ship_is_returning_to_playground = false
 var ship_playground
 var ship_bullet_cooldown_time_left = 0.0
 var ship_bullet_cooldown_time = 0.06
+
+var ship_starting_health = 1000
+var ship_health = ship_starting_health
 
 func handle_return_to_playground(delta: float):
 	var playground_center = (Vector2(float(PLAYGROUND_WIDTH)/2, float(PLAYGROUND_HEIGHT)/2))
@@ -82,3 +84,11 @@ func _physics_process(delta: float) -> void:
 		if Input.is_joy_button_pressed(ship_controller_device,
 		 	ship_controller_mapping["button_back"]):
 			get_tree().quit(0)
+	
+	for a in get_overlapping_areas():
+		if a.is_in_group("Bullet"):
+			a.queue_free()
+			ship_health -= 100
+	
+	if ship_health <= 0:
+		queue_free()

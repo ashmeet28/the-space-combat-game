@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bfvaa2sxyjlrs" path="res://Entities/Spaceship/spaceship.gd" id="1_otdo3"]
 [ext_resource type="Texture2D" uid="uid://discpi33fuxvy" path="res://Entities/Spaceship/spaceship.png" id="1_p1iq7"]
 
-[node name="Area2D" type="Area2D"]
+[node name="Area2D" type="Area2D" groups=["Spaceship"]]
 script = ExtResource("1_otdo3")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]

@@ -6,7 +6,6 @@ var PLAYGROUND_HEIGHT = 2160
 
 var spaceship_red_template = {
 	"trail_color": Color(255, 0, 0, 1),
-	"group": 1,
 	"starting_position": Vector2(
 		0+SPACESHIP_STARTING_MARGIN,
 		0+SPACESHIP_STARTING_MARGIN),
@@ -14,7 +13,6 @@ var spaceship_red_template = {
 }
 var spaceship_yellow_template = {
 	"trail_color": Color(255, 255, 0, 1),
-	"group": 1,
 	"starting_position": Vector2(
 		0+SPACESHIP_STARTING_MARGIN,
 		PLAYGROUND_HEIGHT-SPACESHIP_STARTING_MARGIN),
@@ -22,7 +20,6 @@ var spaceship_yellow_template = {
 }
 var spaceship_green_template = {
 	"trail_color": Color(0, 255, 0, 1),
-	"group": 2,
 	"starting_position": Vector2(
 		PLAYGROUND_WIDTH-SPACESHIP_STARTING_MARGIN,
 		0+SPACESHIP_STARTING_MARGIN),
@@ -30,7 +27,6 @@ var spaceship_green_template = {
 }
 var spaceship_aqua_template = {
 	"trail_color": Color(0, 255, 255, 1),
-	"group": 2,
 	"starting_position": Vector2(
 		PLAYGROUND_WIDTH-SPACESHIP_STARTING_MARGIN,
 		PLAYGROUND_HEIGHT-SPACESHIP_STARTING_MARGIN),
@@ -47,7 +43,6 @@ func spaceship_add_new(spaceship_template):
 	var spaceship = preload("res://Entities/Spaceship/spaceship.tscn").instantiate()
 	spaceship.position = spaceship_template.starting_position
 	spaceship.rotation = spaceship_template.starting_rotation
-	spaceship.ship_group = spaceship_template.group
 	spaceship.ship_trail_color = spaceship_template.trail_color
 	spaceship.ship_playground = self
 	add_child.call_deferred(spaceship)
