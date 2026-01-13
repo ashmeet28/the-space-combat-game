@@ -18,6 +18,9 @@ func _physics_process(_delta: float) -> void:
 		queue_free()
 		return
 	
+	if is_queued_for_deletion():
+		return
+
 	var final_trail_offset = SPACESHIP_TRAIL_OFFSET
 	if spaceship_engine == 1:
 		final_trail_offset.x = -final_trail_offset.x

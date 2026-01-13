@@ -45,7 +45,7 @@ func spaceship_add_new(spaceship_template):
 	spaceship.rotation = spaceship_template.starting_rotation
 	spaceship.ship_trail_color = spaceship_template.trail_color
 	spaceship.ship_playground = self
-	add_child.call_deferred(spaceship)
+	add_child(spaceship)
 	return spaceship
 
 func spaceship_trail_add_new(spaceship_engine, spaceship):
@@ -53,7 +53,7 @@ func spaceship_trail_add_new(spaceship_engine, spaceship):
 		"res://Entities/SpaceshipTrail/spaceship_trail.tscn").instantiate()
 	spaceship_trail.spaceship = spaceship
 	spaceship_trail.spaceship_engine = spaceship_engine
-	add_child.call_deferred(spaceship_trail)
+	add_child(spaceship_trail)
 	return spaceship_trail
 
 func spaceship_trails_add_new(spaceship_state):
@@ -102,3 +102,9 @@ func handle_debug_mode_input_spaceship_switching(_delta: float):
 func _physics_process(delta: float) -> void:
 	if GameSettings.is_debug_mode_enabled:
 		handle_debug_mode_input_spaceship_switching(delta)
+
+
+# Overlapping areas collision connections
+# Spaceship
+# Bullet
+# SpaceMine

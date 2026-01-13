@@ -3,7 +3,7 @@ extends Area2D
 var ship_default_rotation_speed = PI
 var ship_default_speed = 750
 
-var ship_rotation_speed_while_firing_bullets = PI/4
+var ship_rotation_speed_while_firing_bullets = PI/6
 
 var ship_controller_is_connected= false
 var ship_controller_device
@@ -20,7 +20,10 @@ var ship_is_returning_to_playground = false
 
 var ship_playground
 var ship_bullet_cooldown_time_left = 0.0
-var ship_bullet_cooldown_time = 0.06
+var ship_bullet_cooldown_time = 0.03 # Bullet length / (Bullet speed + Spaceship speed)
+
+var ship_space_mine_cooldown_time_left = 0.0
+var ship_space_mine_cooldown_time = 0.3
 
 var ship_starting_health = 1000
 var ship_health = ship_starting_health
@@ -55,10 +58,22 @@ func playground_add_bullet(_delta: float):
 	var bullet = preload("res://Entities/Bullet/bullet.tscn").instantiate()
 	bullet.position =  position + Vector2(0, -65).rotated(rotation)
 	bullet.rotation =  rotation
-	ship_playground.add_child.call_deferred(bullet)
+	ship_playground.add_child(bullet)
 	ship_bullet_cooldown_time_left = ship_bullet_cooldown_time
 
+func playground_add_space_mine(_delta: float):
+	if ship_space_mine_cooldown_time_left > 0:
+		return
+	var space_mine = preload("res://Entities/SpaceMine/space_mine.tscn").instantiate()
+	space_mine.position = position + Vector2(0, 100).rotated(rotation)
+	ship_playground.add_child(space_mine)
+	ship_space_mine_cooldown_time_left = ship_space_mine_cooldown_time
+	
+
 func _physics_process(delta: float) -> void:
+	if is_queued_for_deletion():
+		return
+
 	if ((position.x > PLAYGROUND_WIDTH) or (position.y > PLAYGROUND_HEIGHT) or 
 		(position.x < 0) or (position.y < 0)):
 		ship_is_returning_to_playground = true
@@ -76,19 +91,27 @@ func _physics_process(delta: float) -> void:
 	
 	if ship_bullet_cooldown_time_left > 0:
 		ship_bullet_cooldown_time_left -= delta
+	if ship_space_mine_cooldown_time_left > 0:
+		ship_space_mine_cooldown_time_left -= delta
 	
 	if ship_controller_is_connected:
 		if Input.is_joy_button_pressed(ship_controller_device, 
 			ship_controller_mapping["button_a"]):
 			playground_add_bullet(delta)
+		if Input.is_joy_button_pressed(ship_controller_device, 
+			ship_controller_mapping["button_x"]):
+			playground_add_space_mine(delta)
 		if Input.is_joy_button_pressed(ship_controller_device,
 		 	ship_controller_mapping["button_back"]):
 			get_tree().quit(0)
 	
 	for a in get_overlapping_areas():
-		if a.is_in_group("Bullet"):
+		if a.is_in_group("Bullet") && !a.is_queued_for_deletion():
 			a.queue_free()
 			ship_health -= 100
+		elif a.is_in_group("SpaceMine") && !a.is_queued_for_deletion():
+			a.queue_free()
+			ship_health -= 500
 	
 	if ship_health <= 0:
 		queue_free()
