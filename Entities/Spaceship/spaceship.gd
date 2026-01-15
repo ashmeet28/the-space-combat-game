@@ -95,15 +95,17 @@ func _physics_process(delta: float) -> void:
 		ship_space_mine_cooldown_time_left -= delta
 	
 	if ship_controller_is_connected:
-		if Input.is_joy_button_pressed(ship_controller_device, 
-			ship_controller_mapping["button_a"]):
-			playground_add_bullet(delta)
-		if Input.is_joy_button_pressed(ship_controller_device, 
-			ship_controller_mapping["button_x"]):
-			playground_add_space_mine(delta)
 		if Input.is_joy_button_pressed(ship_controller_device,
 		 	ship_controller_mapping["button_back"]):
 			get_tree().quit(0)
+
+		if !ship_is_returning_to_playground:
+			if Input.is_joy_button_pressed(ship_controller_device, 
+				ship_controller_mapping["button_a"]):
+				playground_add_bullet(delta)
+			elif Input.is_joy_button_pressed(ship_controller_device, 
+				ship_controller_mapping["button_b"]):
+				playground_add_space_mine(delta)
 	
 	for a in get_overlapping_areas():
 		if a.is_in_group("Bullet") && !a.is_queued_for_deletion():
