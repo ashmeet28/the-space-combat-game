@@ -25,7 +25,7 @@ var ship_bullet_cooldown_time = 0.03 # Bullet length / (Bullet speed + Spaceship
 var ship_space_mine_cooldown_time_left = 0.0
 var ship_space_mine_cooldown_time = 0.3
 
-var ship_starting_health = 1000
+var ship_starting_health = 10000
 var ship_health = ship_starting_health
 
 func handle_return_to_playground(delta: float):
