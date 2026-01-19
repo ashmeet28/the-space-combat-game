@@ -71,9 +71,9 @@ func _ready() -> void:
 	spaceship_aqua = spaceship_add_new(spaceship_aqua_template)
 	spaceship_trails_add_new(spaceship_aqua)
 	spaceships = [spaceship_red, spaceship_yellow, spaceship_green, spaceship_aqua]
-	var m = preload("res://Entities/Missile/missile.tscn").instantiate()
-	m.position = Vector2(PLAYGROUND_WIDTH/2, PLAYGROUND_HEIGHT/2)
-	add_child(m)
+	#var m = preload("res://Entities/Missile/missile.tscn").instantiate()
+	#m.position = Vector2(PLAYGROUND_WIDTH/2, PLAYGROUND_HEIGHT/2)
+	#add_child(m)
 	
 func handle_debug_mode_input_spaceship_switching(_delta: float):
 	var disconnect_spaceships_controller = func():
