@@ -25,8 +25,12 @@ var ship_bullet_cooldown_time = 0.03 # Bullet length / (Bullet speed + Spaceship
 var ship_space_mine_cooldown_time_left = 0.0
 var ship_space_mine_cooldown_time = 0.3
 
+var ship_missile_is_in_chamber = false
+var ship_missile_next_launcher = 1
+
 var ship_starting_health = 10000
 var ship_health = ship_starting_health
+
 
 func handle_return_to_playground(delta: float):
 	var playground_center = (Vector2(float(PLAYGROUND_WIDTH)/2, float(PLAYGROUND_HEIGHT)/2))
@@ -66,9 +70,20 @@ func playground_add_space_mine(_delta: float):
 		return
 	var space_mine = preload("res://Entities/SpaceMine/space_mine.tscn").instantiate()
 	space_mine.position = position + Vector2(0, 100).rotated(rotation)
+	space_mine.rotation = rotation
 	ship_playground.add_child(space_mine)
 	ship_space_mine_cooldown_time_left = ship_space_mine_cooldown_time
 	
+func playground_add_missile(_delta: float):
+	if !ship_missile_is_in_chamber:
+		return
+	var missile = preload("res://Entities/Missile/missile.tscn").instantiate()
+	missile.position = position + Vector2(25 * ship_missile_next_launcher, -80).rotated(rotation)
+	ship_missile_next_launcher = -ship_missile_next_launcher
+	missile.rotation = rotation
+	ship_playground.add_child(missile)
+	ship_missile_is_in_chamber = false
+
 
 func _physics_process(delta: float) -> void:
 	if is_queued_for_deletion():
@@ -106,7 +121,13 @@ func _physics_process(delta: float) -> void:
 			elif Input.is_joy_button_pressed(ship_controller_device, 
 				ship_controller_mapping["button_b"]):
 				playground_add_space_mine(delta)
-	
+			elif Input.is_joy_button_pressed(ship_controller_device, 
+				ship_controller_mapping["button_x"]):
+				playground_add_missile(delta)
+
+		if !Input.is_joy_button_pressed(ship_controller_device, 
+				ship_controller_mapping["button_x"]):
+				ship_missile_is_in_chamber = true
 	for a in get_overlapping_areas():
 		if a.is_in_group("Bullet") && !a.is_queued_for_deletion():
 			a.queue_free()
