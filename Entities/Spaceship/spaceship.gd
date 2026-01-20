@@ -83,6 +83,9 @@ func playground_add_missile(_delta: float):
 	missile.rotation = rotation
 	ship_playground.add_child(missile)
 	ship_missile_is_in_chamber = false
+	var missile_trail = preload("res://Entities/MissileTrail/missile_trail.tscn").instantiate()
+	missile_trail.missile = missile
+	ship_playground.add_child(missile_trail)
 
 
 func _physics_process(delta: float) -> void:
@@ -128,6 +131,7 @@ func _physics_process(delta: float) -> void:
 		if !Input.is_joy_button_pressed(ship_controller_device, 
 				ship_controller_mapping["button_x"]):
 				ship_missile_is_in_chamber = true
+
 	for a in get_overlapping_areas():
 		if a.is_in_group("Bullet") && !a.is_queued_for_deletion():
 			a.queue_free()
