@@ -57,8 +57,8 @@ func spaceship_trail_add_new(spaceship_engine, spaceship):
 	return spaceship_trail
 
 func spaceship_trails_add_new(spaceship_state):
-	spaceship_trail_add_new(0, spaceship_state)
 	spaceship_trail_add_new(1, spaceship_state)
+	spaceship_trail_add_new(-1, spaceship_state)
 	
 
 func _ready() -> void:
