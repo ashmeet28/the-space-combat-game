@@ -21,13 +21,16 @@ func _physics_process(delta: float) -> void:
 	position +=  Vector2.UP.rotated(rotation) * bullet_default_speed * delta
 	
 	for a in get_overlapping_areas():
+		if is_queued_for_deletion():
+			break
+		if a.is_queued_for_deletion():
+			continue
+
 		if a.is_in_group("Bullet"):
 			a.queue_free()
 			queue_free()
-			break
 		elif a.is_in_group("SpaceMine"):
 			a.queue_free()
 			queue_free()
-			break
 
 	queue_free_if_out_of_playground()

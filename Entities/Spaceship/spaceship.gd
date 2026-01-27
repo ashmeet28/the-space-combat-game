@@ -41,7 +41,7 @@ func handle_return_to_playground(delta: float):
 		rotation -= ship_default_rotation_speed * delta
 
 
-func handle_controller_input(delta: float):
+func handle_controller_joy_axis_input(delta: float):
 	var jv = Vector2(
 		Input.get_joy_axis(ship_controller_device, ship_controller_mapping.axis_x),
 		Input.get_joy_axis(ship_controller_device, ship_controller_mapping.axis_y))
@@ -104,7 +104,7 @@ func _physics_process(delta: float) -> void:
 			(position.y > PLAYGROUND_RETURN_MARGIN)):
 			ship_is_returning_to_playground = false
 	elif ship_controller_is_connected:
-		handle_controller_input(delta)
+		handle_controller_joy_axis_input(delta)
 		
 	position +=  Vector2.UP.rotated(rotation) * ship_default_speed * delta
 	
@@ -134,10 +134,13 @@ func _physics_process(delta: float) -> void:
 				ship_missile_is_in_chamber = true
 
 	for a in get_overlapping_areas():
-		if a.is_in_group("Bullet") && !a.is_queued_for_deletion():
+		if a.is_queued_for_deletion():
+			continue
+
+		if a.is_in_group("Bullet"):
 			a.queue_free()
 			ship_health -= 100
-		elif a.is_in_group("SpaceMine") && !a.is_queued_for_deletion():
+		elif a.is_in_group("SpaceMine"):
 			a.queue_free()
 			ship_health -= 500
 	
