@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b3r0tvdwidlck" path="res://Entities/SpaceshipTrail/spaceship_trail.gd" id="1_7u24x"]
 
 [node name="Line2D" type="Line2D"]
+z_index = 1
 width = 3.0
 antialiased = true
 script = ExtResource("1_7u24x")
