@@ -105,7 +105,8 @@ func _physics_process(delta: float) -> void:
 			ship_is_returning_to_playground = false
 	elif ship_controller_is_connected:
 		handle_controller_input(delta)
-	position +=  (Vector2.UP * ship_default_speed * delta).rotated(rotation)
+		
+	position +=  Vector2.UP.rotated(rotation) * ship_default_speed * delta
 	
 	if ship_bullet_cooldown_time_left > 0:
 		ship_bullet_cooldown_time_left -= delta

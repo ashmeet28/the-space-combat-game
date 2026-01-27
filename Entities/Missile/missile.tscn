@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://p08goj1m7ohj" path="res://Entities/Missile/missile.png" id="1_3i05i"]
 [ext_resource type="Script" uid="uid://ddggp1moj27tn" path="res://Entities/Missile/missile.gd" id="1_kyyaa"]
 
-[node name="Area2D" type="Area2D"]
+[node name="Area2D" type="Area2D" groups=["Missile"]]
 script = ExtResource("1_kyyaa")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
