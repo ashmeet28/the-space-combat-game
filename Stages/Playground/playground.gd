@@ -106,7 +106,7 @@ func _physics_process(delta: float) -> void:
 		handle_debug_mode_input_spaceship_switching(delta)
 
 
-# Overlapping areas collision connections
+# Overlapping areas collision connections:
 # Spaceship
 # Bullet
 # SpaceMine

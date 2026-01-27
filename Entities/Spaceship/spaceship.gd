@@ -20,12 +20,14 @@ var ship_is_returning_to_playground = false
 
 var ship_playground
 var ship_bullet_cooldown_time_left = 0.0
-var ship_bullet_cooldown_time = 0.03 # Bullet length / (Bullet speed + Spaceship speed)
+var ship_bullet_cooldown_time = 0.03 # Bullet length / (Bullet speed - Spaceship speed)
 
 var ship_space_mine_cooldown_time_left = 0.0
 var ship_space_mine_cooldown_time = 0.3
 
 var ship_missile_is_in_chamber = false
+var ship_missile_cooldown_time_left = 0.0
+var ship_missile_cooldown_time = 0.4
 var ship_missile_next_launcher = 1
 
 var ship_starting_health = 10000
@@ -75,7 +77,7 @@ func playground_add_space_mine(_delta: float):
 	ship_space_mine_cooldown_time_left = ship_space_mine_cooldown_time
 	
 func playground_add_missile(_delta: float):
-	if !ship_missile_is_in_chamber:
+	if not ship_missile_is_in_chamber or ship_missile_cooldown_time_left > 0:
 		return
 	var missile = preload("res://Entities/Missile/missile.tscn").instantiate()
 	missile.position = position + Vector2(25 * ship_missile_next_launcher, -80).rotated(rotation)
@@ -86,6 +88,7 @@ func playground_add_missile(_delta: float):
 	var missile_trail = preload("res://Entities/MissileTrail/missile_trail.tscn").instantiate()
 	missile_trail.missile = missile
 	ship_playground.add_child(missile_trail)
+	ship_missile_cooldown_time_left = ship_missile_cooldown_time
 
 
 func _physics_process(delta: float) -> void:
@@ -112,6 +115,8 @@ func _physics_process(delta: float) -> void:
 		ship_bullet_cooldown_time_left -= delta
 	if ship_space_mine_cooldown_time_left > 0:
 		ship_space_mine_cooldown_time_left -= delta
+	if ship_missile_cooldown_time_left > 0:
+		ship_missile_cooldown_time_left -= delta
 	
 	if ship_controller_is_connected:
 		if Input.is_joy_button_pressed(ship_controller_device,
@@ -129,7 +134,7 @@ func _physics_process(delta: float) -> void:
 				ship_controller_mapping["button_x"]):
 				playground_add_missile(delta)
 
-		if !Input.is_joy_button_pressed(ship_controller_device, 
+		if not Input.is_joy_button_pressed(ship_controller_device, 
 				ship_controller_mapping["button_x"]):
 				ship_missile_is_in_chamber = true
 
