@@ -32,5 +32,8 @@ func _physics_process(delta: float) -> void:
 		elif a.is_in_group("SpaceMine"):
 			a.queue_free()
 			queue_free()
+		elif a.is_in_group("Missile"):
+			a.queue_free()
+			queue_free()
 
 	queue_free_if_out_of_playground()

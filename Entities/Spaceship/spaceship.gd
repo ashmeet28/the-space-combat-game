@@ -148,6 +148,9 @@ func _physics_process(delta: float) -> void:
 		elif a.is_in_group("SpaceMine"):
 			a.queue_free()
 			ship_health -= 500
+		elif a.is_in_group("Missile"):
+			a.queue_free()
+			ship_health -= 500
 	
 	if ship_health <= 0:
 		queue_free()
