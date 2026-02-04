@@ -30,7 +30,7 @@ var ship_missile_cooldown_time_left = 0.0
 var ship_missile_cooldown_time = 0.4
 var ship_missile_next_launcher = 1
 
-var ship_starting_health = 10000
+var ship_starting_health = 1000
 var ship_health = ship_starting_health
 
 
@@ -123,7 +123,7 @@ func _physics_process(delta: float) -> void:
 		 	ship_controller_mapping["button_back"]):
 			get_tree().quit(0)
 
-		if !ship_is_returning_to_playground:
+		if not ship_is_returning_to_playground:
 			if Input.is_joy_button_pressed(ship_controller_device, 
 				ship_controller_mapping["button_a"]):
 				playground_add_bullet(delta)

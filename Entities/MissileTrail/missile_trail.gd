@@ -3,7 +3,7 @@ extends Line2D
 var missile
 
 var missile_trail_offset = Vector2(0, 60)
-var POINT_LIFETIME = 150
+var POINT_LIFETIME = 100
 
 var points_tracked: Array[Vector2] =[]
 var points_timestamp: Array[int] = []
