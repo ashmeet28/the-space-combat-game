@@ -154,3 +154,6 @@ func _physics_process(delta: float) -> void:
 	
 	if ship_health <= 0:
 		queue_free()
+	
+	if $RayCast2D.is_colliding() && ship_trail_color == Color(255, 0, 0, 1):
+		print($RayCast2D.get_collider())
