@@ -11,3 +11,9 @@ polygon = PackedVector2Array(0, -44, 6, -29, 6, 43, -6, 43, -6, -29)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_3i05i")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(0, -50)
+target_position = Vector2(0, -6000)
+collide_with_areas = true
+collide_with_bodies = false

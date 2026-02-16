@@ -53,6 +53,9 @@ func handle_controller_joy_axis_input(delta: float):
 		var s = ship_default_rotation_speed
 		if ship_bullet_cooldown_time_left > 0:
 			s = ship_rotation_speed_while_firing_bullets
+
+		if abs(d) < 0.05:
+			s = s/16
 		if (d >= 0):
 			rotation += s * delta
 		else:
@@ -89,6 +92,9 @@ func playground_add_missile(_delta: float):
 	missile_trail.missile = missile
 	ship_playground.add_child(missile_trail)
 	ship_missile_cooldown_time_left = ship_missile_cooldown_time
+	var missile_possible_target =  $RayCast2D.get_collider()
+	if is_instance_valid(missile_possible_target) && missile_possible_target.is_in_group("Spaceship"):
+		missile.missile_target = missile_possible_target
 
 
 func _physics_process(delta: float) -> void:
@@ -155,5 +161,3 @@ func _physics_process(delta: float) -> void:
 	if ship_health <= 0:
 		queue_free()
 	
-	if $RayCast2D.is_colliding() && ship_trail_color == Color(255, 0, 0, 1):
-		print($RayCast2D.get_collider())
