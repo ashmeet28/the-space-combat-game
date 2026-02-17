@@ -72,39 +72,47 @@ func _ready() -> void:
 	spaceship_trails_add_new(spaceship_aqua)
 	spaceships = [spaceship_red, spaceship_yellow, spaceship_green, spaceship_aqua]
 	
-func handle_debug_mode_input_spaceship_switching(_delta: float):
-	var disconnect_spaceships_controller = func():
-		for ship in spaceships:
-			if not is_instance_valid(ship):
-				continue
-			ship.ship_controller_is_connected = false
-			ship.ship_controller_device = null
-			ship.ship_controller_mapping = null
-	
-	var connect_spaceship_controller = func(ship, device, controller_mapping):
-		if not is_instance_valid(ship):
-				return
-		ship.ship_controller_is_connected = true
-		ship.ship_controller_device = device
-		ship.ship_controller_mapping = controller_mapping
-
-	var dpad_spaceship_mapping = {
-		"dpad_up": spaceship_red,
-		"dpad_right": spaceship_green,
-		"dpad_left" : spaceship_aqua,
-		"dpad_down" : spaceship_yellow}
-
-	for k in dpad_spaceship_mapping:
-		var joy_device = 0
-		if Input.is_joy_button_pressed(joy_device, GameSettings.controller_mapping[k]):
-			disconnect_spaceships_controller.call()
-			connect_spaceship_controller.call(
-				dpad_spaceship_mapping[k], joy_device, GameSettings.controller_mapping)
+#func handle_debug_mode_input_spaceship_switching(_delta: float):
+	#var disconnect_spaceships_controller = func():
+		#for ship in spaceships:
+			#if not is_instance_valid(ship):
+				#continue
+			#ship.ship_controller_is_connected = false
+			#ship.ship_controller_device = null
+			#ship.ship_controller_mapping = null
+	#
+	#var connect_spaceship_controller = func(ship, device, controller_mapping):
+		#if not is_instance_valid(ship):
+				#return
+		#ship.ship_controller_is_connected = true
+		#ship.ship_controller_device = device
+		#ship.ship_controller_mapping = controller_mapping
+#
+	#var dpad_spaceship_mapping = {
+		#"dpad_up": spaceship_red,
+		#"dpad_right": spaceship_green,
+		#"dpad_left" : spaceship_aqua,
+		#"dpad_down" : spaceship_yellow}
+#
+	#for k in dpad_spaceship_mapping:
+		#var joy_device = 0
+		#if Input.is_joy_button_pressed(joy_device, GameSettings.controller_mapping[k]):
+			#disconnect_spaceships_controller.call()
+			#connect_spaceship_controller.call(
+				#dpad_spaceship_mapping[k], joy_device, GameSettings.controller_mapping)
 		
 
+func handle_controller_assignment(_delta: float):
+	pass
+	
+	
+	
 func _physics_process(delta: float) -> void:
 	if GameSettings.is_debug_mode_enabled:
-		handle_debug_mode_input_spaceship_switching(delta)
+		pass
+		#handle_debug_mode_input_spaceship_switching(delta)
+	else:
+		handle_controller_assignment(delta)
 
 
 # Overlapping areas collision connections:
