@@ -1,6 +1,6 @@
 extends Node
 
-var is_debug_mode_enabled = true
+#var is_debug_mode_enabled = true
 
 var controller_mapping = {
 	"axis_x": JOY_AXIS_LEFT_X,

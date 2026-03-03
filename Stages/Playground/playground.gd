@@ -103,16 +103,73 @@ func _ready() -> void:
 		
 
 func handle_controller_assignment(_delta: float):
-	pass
+	var connect_spaceship_controller = func(ship, device, controller_mapping):
+		if not is_instance_valid(ship):
+				return
+		ship.ship_controller_is_connected = true
+		ship.ship_controller_device = device
+		ship.ship_controller_mapping = controller_mapping
+
+	#var disconnect_spaceships_controller = func():
+		#for ship in spaceships:
+			#if not is_instance_valid(ship):
+				#continue
+			#ship.ship_controller_is_connected = false
+			#ship.ship_controller_device = null
+			#ship.ship_controller_mapping = null
+
+	var disconnect_controller_from_spaceship = func(device):
+		for ship in spaceships:
+			if not is_instance_valid(ship):
+				continue
+			if ship.ship_controller_is_connected and (ship.ship_controller_device == device):
+				ship.ship_controller_is_connected = false
+				ship.ship_controller_device = null
+				ship.ship_controller_mapping = null
+				break
 	
+	var spaceship_mapping_info = [
+		{
+			"spaceship": spaceship_aqua,
+			"joy_axis": "axis_y",
+			"joy_axis_direction": -1,
+		},
+		{
+			"spaceship": spaceship_red,
+			"joy_axis": "axis_y",
+			"joy_axis_direction": 1,
+		},
+		{
+			"spaceship": spaceship_green,
+			"joy_axis": "axis_x",
+			"joy_axis_direction": -1,
+		},
+		{
+			"spaceship": spaceship_yellow,
+			"joy_axis": "axis_x",
+			"joy_axis_direction": 1,
+		}]
+
+	for smi in spaceship_mapping_info:
+		for d in range(32):
+			var ja = Input.get_joy_axis(d, GameSettings.controller_mapping[smi.joy_axis])
+			if (abs(ja) > 0.5) and ((ja * smi.joy_axis_direction) > 0):
+				if !smi.spaceship.ship_controller_is_connected:
+					var is_already_connected = false
+					for ship in spaceships:
+						if ship.ship_controller_device == d:
+							is_already_connected = true
+							break
+					if !is_already_connected:
+						connect_spaceship_controller.call(
+							smi.spaceship, d, GameSettings.controller_mapping)
+			
+			if Input.is_joy_button_pressed(d, GameSettings.controller_mapping["button_x"]):
+				disconnect_controller_from_spaceship.call(d)
 	
 	
 func _physics_process(delta: float) -> void:
-	if GameSettings.is_debug_mode_enabled:
-		pass
-		#handle_debug_mode_input_spaceship_switching(delta)
-	else:
-		handle_controller_assignment(delta)
+	handle_controller_assignment(delta)
 
 
 # Overlapping areas collision connections:
