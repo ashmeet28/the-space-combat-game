@@ -39,6 +39,8 @@ var spaceship_green
 var spaceship_aqua
 var spaceships
 
+var is_controller_assignment_done = false
+
 func spaceship_add_new(spaceship_template):
 	var spaceship = preload("res://Entities/Spaceship/spaceship.tscn").instantiate()
 	spaceship.position = spaceship_template.starting_position
@@ -166,10 +168,24 @@ func handle_controller_assignment(_delta: float):
 			
 			if Input.is_joy_button_pressed(d, GameSettings.controller_mapping["button_x"]):
 				disconnect_controller_from_spaceship.call(d)
+
+			if Input.is_joy_button_pressed(d, GameSettings.controller_mapping["button_a"]):
+				var total_controller_connected = 0
+				for ship in spaceships:
+					if ship.ship_controller_is_connected:
+						total_controller_connected += 1
+				if total_controller_connected > 0:
+					for ship in spaceships:
+						ship.ship_controller_is_assignment_done = true
+						$SpaceshipSelectorActions.queue_free()
+						$SpaceshipSelectorArrows.queue_free()
+					is_controller_assignment_done = true
+					
 	
 	
 func _physics_process(delta: float) -> void:
-	handle_controller_assignment(delta)
+	if not is_controller_assignment_done:
+		handle_controller_assignment(delta)
 
 
 # Overlapping areas collision connections:
