@@ -179,6 +179,7 @@ func _physics_process(delta: float) -> void:
 	if not is_controller_assignment_done:
 		handle_controller_assignment(delta)
 
+# TODO: Add bullet pickup logic
 
 # Overlapping areas collision connections:
 # Spaceship
