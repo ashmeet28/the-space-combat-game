@@ -112,14 +112,6 @@ func handle_controller_assignment(_delta: float):
 		ship.ship_controller_device = device
 		ship.ship_controller_mapping = controller_mapping
 
-	#var disconnect_spaceships_controller = func():
-		#for ship in spaceships:
-			#if not is_instance_valid(ship):
-				#continue
-			#ship.ship_controller_is_connected = false
-			#ship.ship_controller_device = null
-			#ship.ship_controller_mapping = null
-
 	var disconnect_controller_from_spaceship = func(device):
 		for ship in spaceships:
 			if not is_instance_valid(ship):
