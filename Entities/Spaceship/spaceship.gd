@@ -157,6 +157,8 @@ func _physics_process(delta: float) -> void:
 
 
 	for a in get_overlapping_areas():
+		if is_queued_for_deletion():
+			break
 		if a.is_queued_for_deletion():
 			continue
 
@@ -170,6 +172,6 @@ func _physics_process(delta: float) -> void:
 			a.queue_free()
 			ship_health -= 500
 
-	if ship_health <= 0:
-		queue_free()
+		if ship_health <= 0:
+			queue_free()
 	
